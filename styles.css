@@ -1,0 +1,165 @@
+html {
+  font-size: 92%;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.sidebar {
+  width: 150px;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+  margin-bottom: 2rem;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+}
+
+.sidebar .profile {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+}
+
+.sidebar img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.timer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.timer div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.timer input,
+.timer button {
+  padding: 10px;
+  margin: 5px;
+}
+
+.timer .show {
+  color: lightgray;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  padding: 20px;
+}
+
+.timer button {
+  color: #090909;
+  padding: 0.7em 1.7em;
+  font-size: 14px;
+  border-radius: 0.5em;
+  background: lightgray;
+  cursor: pointer;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s;
+}
+
+button:hover {
+  border: 1px solid white;
+}
+
+button:active {
+  box-shadow: 4px 4px 12px #c5c5c5, -4px -4px 12px #ffffff;
+}
+
+.timer input {
+  border: none !important;
+  width: 500px;
+  font-size: 1rem;
+}
+
+input:focus {
+  outline: none;
+}
+
+.summary {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+
+.summary div {
+  text-align: center;
+}
+
+.entries {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+.entries div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.entries h3 {
+  display: inline-block;
+  font-size: 14px;
+  padding: 15px;
+  margin: 0;
+}
+
+.entries table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.entries tr:hover {
+  background: rgb(237, 237, 237);
+}
+
+.entries th,
+.entries td {
+  padding: 15px;
+  text-align: left;
+}
+
+.entries th {
+  font-size: 1rem;
+  font-weight: bold;
+  color: grey;
+  background-color: transparent;
+  border-bottom: 1px solid #ddd;
+}
+
+.entries td {
+  color: #4b4b4b;
+}
