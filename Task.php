@@ -1,5 +1,4 @@
 <?php
-
 class Task {
     private $taskId;
     private $userId;
@@ -9,6 +8,19 @@ class Task {
         $this->taskId = $taskId;
         $this->userId = $userId;
         $this->taskName = $taskName;
+    }
+
+    // Getters for Task properties
+    public function getTaskId() {
+        return $this->taskId;
+    }
+
+    public function getUserId() {
+        return $this->userId;
+    }
+
+    public function getTaskName() {
+        return $this->taskName;
     }
 
     // CRUD operations for Task

@@ -30,6 +30,7 @@
 
             if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $_SESSION['username'] = $username;
+                $_SESSION['userId'] = $row['id'];
                 // Redirect to user dashboard page
                 header("Location: index.php");
                 exit(); // Ensure no further code is executed
