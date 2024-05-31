@@ -12,11 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $task_name = trim($_POST['taskName']);
     $username = $_SESSION['username'];
     $userId = $_SESSION['userId'];
+    $taskDuration = $_POST['duration'];
 
     // Basic validation
     if (!empty($task_name)) {
         $taskName = $_POST['taskName'];
-        $task = new Task(null, $userId, $taskName);
+        $task = new Task(null, $userId, $taskName,$taskDuration,"");
         $task->createTask($conn);
         header("Location: index.php");
         exit();

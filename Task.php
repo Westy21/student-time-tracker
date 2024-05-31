@@ -1,13 +1,22 @@
 <?php
+
+// Debugging
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
 class Task {
     private $taskId;
     private $userId;
     private $taskName;
+    private $taskDuration;
+    private $taskGroup;
 
-    public function __construct($taskId, $userId, $taskName) {
+    public function __construct($taskId, $userId, $taskName, $taskDuration, $taskGroup) {
         $this->taskId = $taskId;
         $this->userId = $userId;
         $this->taskName = $taskName;
+        $this->taskDuration = $taskDuration;
+        $this->taskGroup = $taskGroup;
     }
 
     // Getters for Task properties
@@ -23,9 +32,17 @@ class Task {
         return $this->taskName;
     }
 
+    public function getTaskDuration(){
+        return $this->taskDuration;
+    }
+
+    public function getTaskGroup(){
+        return $this->taskGroup;
+    }
+
     // CRUD operations for Task
     public function createTask($conn) {
-        $sql = "INSERT INTO Tasks (userId, taskName) VALUES ($this->userId, '$this->taskName')";
+        $sql = "INSERT INTO Tasks (userId, taskName,taskDuration,taskGroup) VALUES ($this->userId, '$this->taskName', '$this->taskDuration','default')";
         try {
             $conn->exec($sql);
         } catch (PDOException $e) {
@@ -44,7 +61,7 @@ class Task {
     }
 
     public function updateTask($conn) {
-        $sql = "UPDATE Tasks SET taskName='$this->taskName' WHERE taskId=$this->taskId";
+        $sql = "UPDATE Tasks SET taskName='$this->taskName' taskDuration='$this->taskDuration' taskGroup='$this->taskGroup' WHERE taskId=$this->taskId";
         try {
             $conn->exec($sql);
         } catch (PDOException $e) {

@@ -1,3 +1,4 @@
+// Timer
 let timer;
 let isRunning = false;
 let elapsedSeconds = 0;
@@ -6,6 +7,7 @@ const showDiv = document.querySelector(".show");
 const startPauseBtn = document.getElementById("startPauseBtn");
 const saveBtn = document.getElementById("saveBtn");
 const timeSpentInput = document.getElementById("timeSpent");
+const durationInput = document.getElementById("duration");
 
 function formatTime(seconds) {
 	const hrs = String(Math.floor(seconds / 3600)).padStart(2, "0");
@@ -16,6 +18,7 @@ function formatTime(seconds) {
 
 function updateDisplay() {
 	showDiv.textContent = formatTime(elapsedSeconds);
+	durationInput.value = elapsedSeconds;
 }
 
 function toggleTimer() {
@@ -33,10 +36,7 @@ function toggleTimer() {
 }
 
 function saveTime() {
-	// set value to hidden input
 	timeSpentInput.value = formatTime(elapsedSeconds);
-
-	console.log(showDiv.textContent);
 	elapsedSeconds = 0;
 	updateDisplay();
 	if (isRunning) {
@@ -86,10 +86,11 @@ popupOverlay.addEventListener("click", function (event) {
 });
 
 // JavaScript function to populate the form fields
-function populateForm(taskId, taskName) {
+function populateForm(taskId, taskName, taskGroup) {
 	// Populate form fields with the retrieved data
 	document.getElementById("taskId").value = taskId;
 	document.getElementById("taskName").value = taskName;
+	document.getElementById("taskGroup").value = taskGroup;
 }
 
 // Table event
@@ -101,14 +102,22 @@ document
 			// Retrieve the ID stored in the data-id attribute
 			const id = event.target.getAttribute("data-id");
 			const taskName = event.target.getAttribute("data-taskName");
+			const taskGroup = event.target.getAttribute("data-taskGroup");
 			// Perform actions using the retrieved ID
-			console.log(id);
-			populateForm(id, taskName);
+			populateForm(id, taskName, taskGroup);
 			// Trigger the popup to open (you can call this function on a button click or any other event)
 			openPopup();
 		}
 	});
+
 // Function to set the action before form submission
 function setAction(action) {
 	document.getElementById("action").value = action;
 }
+
+// format taskduration based on tb data-taskDuration value
+document.querySelectorAll("td[data-taskDuration]").forEach(function (td) {
+	var duration = td.getAttribute("data-taskDuration");
+	var formattedDuration = formatTime(duration);
+	td.innerHTML = formattedDuration;
+});

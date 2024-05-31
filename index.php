@@ -3,6 +3,7 @@
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
 require('db.php');
 require ('Task.php');
 include("auth_session.php");
@@ -13,35 +14,34 @@ include("auth_session.php");
 $dataArray = getAllTasks($conn,$_SESSION['userId']);
 $tasks = array();
 foreach ($dataArray as $data) {
-    $task = new Task($data['taskId'], $data['userId'], $data['taskName']);
+    $task = new Task($data['taskId'], $data['userId'], $data['taskName'], $data['taskDuration'],$data['taskGroup']);
     $tasks[] = $task;
 }
 
 
-// handle action
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $action = trim($_POST['action']);
-    $taskName = trim($_POST['taskName']);
-    $taskId = $_POST['taskId'];
-    print_r($taskId);
+    // handle delete/update
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $taskId = $_POST['taskId'];
+        $action = trim($_POST['action']);
+        $taskName = trim($_POST['taskName']);
+        $taskGroup = trim($_POST['taskGroup']);
 
-    // Basic validation
-    if (!empty($action)) {
-        foreach ($tasks as $task) {
-            if ($task->getTaskId() == $taskId){
-                if($action == 'update'){
-                    $task = new Task($task->getTaskId(),$_SESSION['userId'],$taskName);
-                    $task->updateTask($conn);
-                }
-    
-                if($action == 'delete'){
-                    $task->deleteTask($conn, $task->getTaskId());
+        // Basic validation
+        if (!empty($action)) {
+            foreach ($tasks as $task) {
+                if ($task->getTaskId() == $taskId){
+                    if($action == 'update'){
+                        // $task = new Task($task->getTaskId(),$_SESSION['userId'],$taskName,$task->getTaskDuration(),$taskGroup);
+                        // $task->updateTask($conn);
+                    }
+                    if($action == 'delete'){
+                        $task->deleteTask($conn, $task->getTaskId());
+                    }
                 }
             }
         }
+        // header("Location: index.php");
     }
-    header("Location: index.php");
-}
 
 // Display the list of tasks
 // foreach ($tasks as $task) {
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <form method="post" action="create_task.php" id="taskForm">
                 <input type="text" id="taskInput" name="taskName" placeholder="What are you working on right now?"
                     required>
-                <input type="hidden" id="timeSpent" name="timeSpent" value="">
+                <input type="hidden" id="duration" name="duration" value="">
                 <div>
                     <div class="show" id="timeDisplay">00:00:00</div>
                     <button type="button" id="startPauseBtn">Start timer</button>
@@ -82,20 +82,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </form>
         </div>
-        <!-- <div class="summary">
-            <div>
-                <h3>Total Hours</h3>
-                <p>23.5</p>
-            </div>
-            <div>
-                <h3>Avg Hours Per Task</h3>
-                <p>3.7</p>
-            </div>
-            <div>
-                <h3>LittleDate</h3>
-                <p>23%</p>
-            </div>
-        </div> -->
 
         <div class="popup-overlay" id="popupOverlay">
             <div class="popup" id="popup">
@@ -146,15 +132,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </tr>
                 <?php foreach ($tasks as $task): ?>
                 <tr>
-                    <td data-id="<?php echo $task->getTaskId(); ?>" data-taskName="<?php echo $task->getTaskName()?>">
+                    <td data-id="<?php echo $task->getTaskId(); ?>" data-taskName="<?php echo $task->getTaskName()?>"
+                        data-taskGroup="<?php echo $task->getTaskGroup(); ?>">
                         <?php echo $task->getTaskName(); ?></td>
-                    <td data-id="<?php echo $task->getTaskId(); ?>" data-taskName="<?php echo $task->getTaskName()?>">
-                        <?php echo 'project'; ?></td>
-                    <td data-id="<?php echo $task->getTaskId(); ?>" data-taskName="<?php echo $task->getTaskName()?>">
-                        <?php echo '00:43:00'; ?></td>
+
+                    <td data-id="<?php echo $task->getTaskId(); ?>" data-taskName="<?php echo $task->getTaskName()?>"
+                        data-taskGroup="<?php echo $task->getTaskGroup(); ?>">
+                        <?php echo $task->getTaskGroup(); ?></td>
+
+                    <td data-id="<?php echo $task->getTaskId(); ?>" data-taskName="<?php echo $task->getTaskName()?>"
+                        data-taskGroup="<?php echo $task->getTaskGroup(); ?>">
+                        <?php echo $task->getTaskDuration(); ?></td>
                 </tr>
                 <?php endforeach; ?>
-
             </table>
         </div>
     </div>
