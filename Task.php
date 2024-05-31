@@ -61,13 +61,14 @@ class Task {
     }
 
     public function updateTask($conn) {
-        $sql = "UPDATE Tasks SET taskName='$this->taskName' taskDuration='$this->taskDuration' taskGroup='$this->taskGroup' WHERE taskId=$this->taskId";
+        $sql = "UPDATE Tasks SET taskName='$this->taskName', taskDuration='$this->taskDuration', taskGroup='$this->taskGroup' WHERE taskId=$this->taskId";
         try {
             $conn->exec($sql);
         } catch (PDOException $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+
 
     public function deleteTask($conn, $taskId) {
         $sql = "DELETE FROM Tasks WHERE taskId=$taskId";

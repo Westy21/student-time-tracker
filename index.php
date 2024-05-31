@@ -9,13 +9,18 @@ require ('Task.php');
 include("auth_session.php");
 
 
+# store total sum of all task's duration
+$taskDurationSum = 0;
 
 # generate table rows using database data
 $dataArray = getAllTasks($conn,$_SESSION['userId']);
 $tasks = array();
+
+# retreive all tasks from db
 foreach ($dataArray as $data) {
     $task = new Task($data['taskId'], $data['userId'], $data['taskName'], $data['taskDuration'],$data['taskGroup']);
     $tasks[] = $task;
+    $taskDurationSum += $task->getTaskDuration();
 }
 
 
@@ -31,8 +36,8 @@ foreach ($dataArray as $data) {
             foreach ($tasks as $task) {
                 if ($task->getTaskId() == $taskId){
                     if($action == 'update'){
-                        // $task = new Task($task->getTaskId(),$_SESSION['userId'],$taskName,$task->getTaskDuration(),$taskGroup);
-                        // $task->updateTask($conn);
+                        $task = new Task($task->getTaskId(),$_SESSION['userId'],$taskName,$task->getTaskDuration(),$taskGroup);
+                        $task->updateTask($conn);
                     }
                     if($action == 'delete'){
                         $task->deleteTask($conn, $task->getTaskId());
@@ -40,15 +45,16 @@ foreach ($dataArray as $data) {
                 }
             }
         }
-        // header("Location: index.php");
+        header("Location: index.php");
     }
 
-// Display the list of tasks
-// foreach ($tasks as $task) {
-//     echo "Task ID: " . $task->getTaskId() . "\n";
-//     echo "User ID: " . $task->getUserId() . "\n";
-//     echo "Task Name: " . $task->getTaskName() . "\n\n";
-// }
+function formatTime($seconds) {
+    $hours = floor($seconds / 3600);
+    $minutes = floor(($seconds % 3600) / 60);
+    $seconds = $seconds % 60;
+
+    return sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds);
+}
 
 ?>
 <!DOCTYPE html>
@@ -66,15 +72,18 @@ foreach ($dataArray as $data) {
         <h2>TimeTracker</h2>
         <div class="profile">
             <img src="profile-pic.png" alt="Profile Picture">
-            <span>Julia Nakone</span>
+            <span><?php echo $_SESSION['username']?></span>
         </div>
+        <br>
+        <br>
+        <div class="logout"><a href="logout.php"><button class="btn-logout">Logout</button></a></div>
     </div>
     <div class="content">
         <div class="timer">
             <form method="post" action="create_task.php" id="taskForm">
                 <input type="text" id="taskInput" name="taskName" placeholder="What are you working on right now?"
                     required>
-                <input type="hidden" id="duration" name="duration" value="">
+                <input type="hidden" id="taskDuration" name="taskDuration" value="">
                 <div>
                     <div class="show" id="timeDisplay">00:00:00</div>
                     <button type="button" id="startPauseBtn">Start timer</button>
@@ -105,8 +114,7 @@ foreach ($dataArray as $data) {
                                 <label for="taskGroup">Group</label>
                                 <input type="text" id="taskGroup" name="taskGroup" placeholder="Enter task group">
                                 <br>
-                                <label for="taskDuration">Duration</label>
-                                <input type="text" id="taskDuration" name="taskDuration" placeholder="">
+                                <input type="hidden" id="taskDuration" name="taskDuration" placeholder="">
                             </div>
 
                             <!-- Button to submit the form for updating -->
@@ -121,8 +129,8 @@ foreach ($dataArray as $data) {
         </div>
         <div class="entries">
             <div>
-                <h3>October 24, 2020</h3>
-                <h3>20:24:40</h3>
+                <h3><?php echo date('F d, Y')?></h3>
+                <h3><?php echo formatTime($taskDurationSum)?></h3>
             </div>
             <table id="tasksTable">
                 <tr>
@@ -142,7 +150,7 @@ foreach ($dataArray as $data) {
 
                     <td data-id="<?php echo $task->getTaskId(); ?>" data-taskName="<?php echo $task->getTaskName()?>"
                         data-taskGroup="<?php echo $task->getTaskGroup(); ?>">
-                        <?php echo $task->getTaskDuration(); ?></td>
+                        <?php echo formatTime($task->getTaskDuration()); ?></td>
                 </tr>
                 <?php endforeach; ?>
             </table>

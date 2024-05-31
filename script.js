@@ -7,7 +7,7 @@ const showDiv = document.querySelector(".show");
 const startPauseBtn = document.getElementById("startPauseBtn");
 const saveBtn = document.getElementById("saveBtn");
 const timeSpentInput = document.getElementById("timeSpent");
-const durationInput = document.getElementById("duration");
+const durationInput = document.getElementById("taskDuration");
 
 function formatTime(seconds) {
 	const hrs = String(Math.floor(seconds / 3600)).padStart(2, "0");
@@ -114,10 +114,3 @@ document
 function setAction(action) {
 	document.getElementById("action").value = action;
 }
-
-// format taskduration based on tb data-taskDuration value
-document.querySelectorAll("td[data-taskDuration]").forEach(function (td) {
-	var duration = td.getAttribute("data-taskDuration");
-	var formattedDuration = formatTime(duration);
-	td.innerHTML = formattedDuration;
-});
