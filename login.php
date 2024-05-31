@@ -52,7 +52,7 @@
                 echo "<div class='error-message'>$error_message</div>";
             }
             ?>
-            <input type="text" name="username" placeholder="Username" autocomplete="off" required />
+            <input type="text" name="username" placeholder="Username try westy" autocomplete="off" required />
             <input type="submit" value="Login" name="submit" class="btn" />
         </form>
     </div>
